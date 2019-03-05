@@ -2,3 +2,4 @@
 /RestApp/bin
 /RestApp/RestApp.csproj.user
 /.vs
+/RestApp/Properties/PublishProfiles/FolderProfile.pubxml.user
