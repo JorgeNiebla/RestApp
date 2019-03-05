@@ -3,19 +3,41 @@
 
 // Write your JavaScript code.
 $().ready(function () {
-    $('#btnAdd').click(function () {
+    function remove() {
+        var currentLi = $(this).closest('li');
+
+        $.ajax({
+            url: 'api/TodoList',
+            data: "'" + $('#todoList li').index(currentLi) + "'",
+            contentType: "application/json",
+            method: 'DELETE'
+        }).done(function () {
+            currentLi.remove();
+        });
+    }
+
+    function add() {
         $.ajax({
             url: 'api/TodoList',
             data: "'" + $('#txtAdd').val() + "'",
             contentType: "application/json",
             method: 'POST'
         }).done(function () {
-            $('#todoList').append('<li>' + $('#txtAdd').val() + '<button type="button" class="btn btn-danger btn-xs btnRemove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Eliminar</button></li>');
-        });
-    });
+            $('#todoList').append('<li>' + $('#txtAdd').val() + ' <button type="button" class="btn btn-danger btn-xs btnRemove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></li>');
+            $('#txtAdd').val('');
 
-    $('button.btnRemove').on('click', function () {
-        $(this).closest('li').remove();
+            $('.btnRemove').off('click', remove);
+            $('.btnRemove').on('click', remove);
+        });
+    }
+
+    
+    $('#btnAdd').click(add);
+
+    $('#txtAdd').keypress(function (event) {
+        if (event.which === 13) {
+            add();
+        }
     });
 });
 
